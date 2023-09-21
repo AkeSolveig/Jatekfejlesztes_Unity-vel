@@ -26,6 +26,10 @@ public class WeaponSystem : MonoBehaviour
     public GameObject muzzleLight;
     [SerializeField] VisualEffect muzzleFlash2;
 
+    //camera shake
+    [SerializeField] CameraRecoil cameraRecoil;
+    [SerializeField] RecoilSystem recoilSystem;
+
     private void Awake()
     {
         bulletsLeft = magazineSize;
@@ -61,7 +65,7 @@ public class WeaponSystem : MonoBehaviour
 
         //calc direction
         Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, 0);
-
+        
         //RayCast
         if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit, range, whatIsEnemy))
         {
@@ -69,21 +73,33 @@ public class WeaponSystem : MonoBehaviour
 
             //if (rayHit.collider.CompareTag("Enemy")) rayHit.collider.GetComponent<ShootingAi>().TakeDamage(damage);
         }
+        //Debug.DrawRay(fpsCam.transform.position, direction, Color.green);
 
-        //Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.Euler(0, 180, 0));
+        GameObject obj = Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.LookRotation(rayHit.normal));
+        obj.transform.position += obj.transform.forward / 1000;
         //Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
 
+        //muzzleflash
         muzzleLight.SetActive(true);
         muzzleFlash2.Play();
         Invoke("LightOff", 0.1f);
+
+        //camerashake
+        cameraRecoil.Fire();
+
+        //recoil
+        recoilSystem.Fire();
 
         bulletsLeft--;
         bulletsShot--;
 
         Invoke("ResetShot", timeBetweenShooting);
 
+        cameraRecoil.Fire();
         if (bulletsShot > 0 && bulletsLeft > 0)
+        {
             Invoke("Shoot", timeBetweenShots);
+        }
     }
 
     private void LightOff()
