@@ -30,9 +30,12 @@ public class Tilt : MonoBehaviour
 
     private void Update()
     {
+        
         CalculateSway();
         MoveSway();
         TiltSway();
+        
+        
     }
 
     private void CalculateSway()

@@ -7,6 +7,7 @@ public class Sway : MonoBehaviour
     public float intensity;
     public float smooth;
 
+
     private Quaternion origin_rotation;
 
     private void Start()

@@ -7,10 +7,13 @@ public class WeaponSystem : MonoBehaviour
 {
     //Basic stats
     public int damage;
-    public float timeBetweenShooting, spread, range, reloadTime, timeBetweenShots;
+    public float timeBetweenShooting, range, reloadTime, timeBetweenShots;
+    public float defaultSpread, adsSpread;
+    private float spread;
     public int magazineSize, bulletsPerTap;
     public bool allowButtonHold;
     int bulletsLeft, bulletsShot;
+    public bool isAiming;
 
     //bools
     bool shooting, readyToShoot, reloading;
@@ -30,10 +33,17 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] CameraRecoil cameraRecoil;
     [SerializeField] RecoilSystem recoilSystem;
 
+    //ads
+    public Vector3 originalPosition;
+    public Vector3 adsPosition;
+    public float adsSpeed = 8f;
+
+
     private void Awake()
     {
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        originalPosition = transform.localPosition;
     }
     private void MyInput()
     {
@@ -50,9 +60,26 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
+    private void ADS()
+    {
+        if (Input.GetKey(KeyCode.Mouse1) && !reloading)
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, adsPosition, Time.deltaTime * adsSpeed);
+            spread = adsSpread;
+            isAiming = true;
+        }
+        else
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * adsSpeed);
+            spread = defaultSpread;
+            isAiming = false;
+        }
+    }
+
     private void Update()
     {
         MyInput();
+        ADS();
     }
 
     private void Shoot()
@@ -62,9 +89,10 @@ public class WeaponSystem : MonoBehaviour
         //Spread
         float x = Random.Range(-spread, spread);
         float y = Random.Range(-spread, spread);
+        float z = Random.Range(-spread, spread);
 
         //calc direction
-        Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, 0);
+        Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, z);
         
         //RayCast
         if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit, range, whatIsEnemy))
@@ -101,6 +129,8 @@ public class WeaponSystem : MonoBehaviour
             Invoke("Shoot", timeBetweenShots);
         }
     }
+
+    
 
     private void LightOff()
     {

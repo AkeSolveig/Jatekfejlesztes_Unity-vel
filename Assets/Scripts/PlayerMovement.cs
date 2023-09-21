@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -9.81f;
     public float jump = 1f;
     public float sprintModifier;
+    public float aimingModifier;
     public Camera fpsCam;
 
     private float baseFOV;
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
     private bool isSpinting;
+    private bool isAiming;
 
     private void Start()
     {
@@ -51,13 +53,15 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
         bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        bool isSprinting = sprint && z >0;
-
+        bool isSprinting = sprint && z >0 && !isAiming;
         float t_adjustSpeed = speed;
         if (isSprinting) {
             t_adjustSpeed *= sprintModifier;
         }
-
+        if(isAiming)
+        {
+            t_adjustSpeed *= aimingModifier;
+        }
 
         Vector3 move = transform.right * x + transform.forward * z;
         //
@@ -81,21 +85,31 @@ public class PlayerMovement : MonoBehaviour
         }
         else { fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, baseFOV, Time.deltaTime * 8f); }
 
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            isAiming = true;
+        }
+        else
+        {
+            isAiming = false;
+        }
 
-            //headbobbing
-            if (x == 0 && z == 0)
+
+        //headbobbing
+        if (x == 0 && z == 0 && !isAiming)
         {
             HeadBob(idleCounter, 0.025f, 0.025f);
             idleCounter += Time.deltaTime;
             weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 2f);
         }
-            else if (!isSprinting)
+            else if (!isSprinting && !isAiming)
         {
             HeadBob(movementCounter, 0.035f, 0.035f);
             movementCounter += Time.deltaTime * 3f;
             weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 6f);
         }
-            else{
+            else if(isSprinting && !isAiming)
+        {
             HeadBob(movementCounter, 0.03f, 0.045f);
             movementCounter += Time.deltaTime *4.5f;
             weaponParent.localPosition = Vector3.Lerp(weaponParent.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);

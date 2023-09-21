@@ -44,7 +44,7 @@ public class RecoilSystem : MonoBehaviour
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Mouse1))
+		if (Input.GetKey(KeyCode.Mouse1))
 		{
 			aiming = true;
 		}
