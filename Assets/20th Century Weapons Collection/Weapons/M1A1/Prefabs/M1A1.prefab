@@ -366,8 +366,6 @@ GameObject:
   - component: {fileID: 398779188302630706}
   - component: {fileID: 1063816135455577482}
   - component: {fileID: 1063816135455577483}
-  - component: {fileID: -9211194589791242591}
-  - component: {fileID: -2594616566613017495}
   m_Layer: 0
   m_Name: M1A1
   m_TagString: Untagged
@@ -467,41 +465,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-9211194589791242591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1063816135455577480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60ca05989e7a5a341a5153d3f97640b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  intensity: 0
-  smooth: 0
---- !u!114 &-2594616566613017495
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1063816135455577480}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e75cf29705df9a34a91a6f38d84ef9e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  amount: 0.02
-  maxAmount: 0.06
-  smoothAmount: 6
-  rotationAmount: 4
-  maxRotationAmount: 5
-  smoothRotation: 12
-  rotationX: 1
-  rotationY: 1
-  rotationZ: 1
 --- !u!1 &1473863401288948816
 GameObject:
   m_ObjectHideFlags: 0

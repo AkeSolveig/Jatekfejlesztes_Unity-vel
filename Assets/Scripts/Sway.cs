@@ -6,9 +6,12 @@ public class Sway : MonoBehaviour
 {
     public float intensity;
     public float smooth;
+    [SerializeField] WeaponSystem weaponSystem;
+    private float adsIntensity = 1;
+
+    private Quaternion origin_rotation,  t_x_adj,  t_y_adj;
 
 
-    private Quaternion origin_rotation;
 
     private void Start()
     {
@@ -26,8 +29,18 @@ public class Sway : MonoBehaviour
         float t_y_mouse = Input.GetAxis("Mouse Y");
 
         //calculate target rotation
-        Quaternion t_x_adj = Quaternion.AngleAxis(-intensity * t_x_mouse, Vector3.up);
-        Quaternion t_y_adj = Quaternion.AngleAxis(intensity * t_y_mouse, Vector3.right);
+        if (weaponSystem.isAiming)
+        {
+            t_x_adj = Quaternion.AngleAxis(-intensity * t_x_mouse, Vector3.up);
+            t_y_adj = Quaternion.AngleAxis(intensity * t_y_mouse, Vector3.right);
+        }
+        else
+        {
+            t_x_adj = Quaternion.AngleAxis(-adsIntensity * t_x_mouse, Vector3.up);
+            t_y_adj = Quaternion.AngleAxis(adsIntensity * t_y_mouse, Vector3.right);
+        }
+         
+
         Quaternion target_rotation = origin_rotation * t_x_adj * t_y_adj;
 
         //rotate towards target rotation

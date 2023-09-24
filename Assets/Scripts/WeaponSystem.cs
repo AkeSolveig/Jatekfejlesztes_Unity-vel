@@ -38,12 +38,25 @@ public class WeaponSystem : MonoBehaviour
     public Vector3 adsPosition;
     public float adsSpeed = 8f;
 
+    //weapon sound
+    public AudioSource source;
+    public AudioClip fireClip;
+    public AudioClip reloadClip;
+
+    //animator
+    //private Animator animator;
+
+    //reload position
+    public Vector3 reloadPosition;
+    public float reloadPositionSpeed = 20f;
 
     private void Awake()
     {
+   
         bulletsLeft = magazineSize;
         readyToShoot = true;
         originalPosition = transform.localPosition;
+        source = GetComponent<AudioSource>();
     }
     private void MyInput()
     {
@@ -75,11 +88,17 @@ public class WeaponSystem : MonoBehaviour
             isAiming = false;
         }
     }
-
+  
     private void Update()
     {
         MyInput();
         ADS();
+        if (reloading) 
+        {
+            transform.localPosition = Vector3.Lerp(transform.localPosition, reloadPosition, Time.deltaTime * reloadPositionSpeed);
+        }
+        
+            
     }
 
     private void Shoot()
@@ -118,6 +137,13 @@ public class WeaponSystem : MonoBehaviour
         //recoil
         recoilSystem.Fire();
 
+        if(source.isPlaying)
+        {
+            source.Stop();
+            source.Play();
+        }
+        source.PlayOneShot(fireClip);
+
         bulletsLeft--;
         bulletsShot--;
 
@@ -143,12 +169,20 @@ public class WeaponSystem : MonoBehaviour
     }
     private void Reload()
     {
+        //GetComponent<Animator>().Play("reload_m1a1", -1, 0f);
+        //GetComponent<Animator>().SetBool("isReloading", true);
+        
+        
+        //transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, Time.deltaTime * reloadPositionSpeed);
         reloading = true;
+        source.PlayOneShot(reloadClip);
         Invoke("ReloadFinished", reloadTime);
     }
 
     private void ReloadFinished()
     {
+        //GetComponent<Animator>().SetBool("isReloading", false);
+        
         bulletsLeft = magazineSize;
         reloading = false;
     }

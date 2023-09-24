@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Tilt : MonoBehaviour
 {
+    [SerializeField] WeaponSystem weaponySystem;
     [Header("Position")]
     public float amount = 0.02f,
         maxAmount = 0.06f,
@@ -46,21 +47,31 @@ public class Tilt : MonoBehaviour
 
     private void MoveSway()
     {
-        float moveX = Mathf.Clamp(InputX * amount, -maxAmount, maxAmount);
-        float moveY = Mathf.Clamp(InputY * amount, -maxAmount, maxAmount);
+        if (weaponySystem.isAiming == false)
+        {
+            float moveX = Mathf.Clamp(InputX * amount, -maxAmount, maxAmount);
+            float moveY = Mathf.Clamp(InputY * amount, -maxAmount, maxAmount);
 
-        Vector3 finalPosition = new Vector3(moveX, moveY, 0);
+            Vector3 finalPosition = new Vector3(moveX, moveY, 0);
 
-        transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition + initialPosition, Time.deltaTime * smoothAmount);
+            transform.localPosition = Vector3.Lerp(transform.localPosition, finalPosition + initialPosition, Time.deltaTime * smoothAmount);
+        }
+        else transform.localPosition = initialPosition;
+        
     }
 
     private void TiltSway()
     {
-        float tiltY = Mathf.Clamp(InputX * rotationAmount, -maxRotationAmount, maxRotationAmount);
-        float tiltX = Mathf.Clamp(InputY * rotationAmount, -maxRotationAmount, maxRotationAmount);
+        if (weaponySystem.isAiming == false)
+        {
+            float tiltY = Mathf.Clamp(InputX * rotationAmount, -maxRotationAmount, maxRotationAmount);
+            float tiltX = Mathf.Clamp(InputY * rotationAmount, -maxRotationAmount, maxRotationAmount);
 
-        Quaternion finalRotation = Quaternion.Euler(new Vector3(rotationX ? -tiltX : 0f, rotationY ? tiltY : 0f, rotationZ ? tiltY : 0f));
+            Quaternion finalRotation = Quaternion.Euler(new Vector3(rotationX ? -tiltX : 0f, rotationY ? tiltY : 0f, rotationZ ? tiltY : 0f));
 
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, finalRotation * initialRotation, smoothRotation * Time.deltaTime);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, finalRotation * initialRotation, smoothRotation * Time.deltaTime);
+        }
+        else transform.localPosition = initialPosition;
+
     }
 }
