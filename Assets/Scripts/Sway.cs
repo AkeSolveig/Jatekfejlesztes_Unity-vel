@@ -29,7 +29,7 @@ public class Sway : MonoBehaviour
         float t_y_mouse = Input.GetAxis("Mouse Y");
 
         //calculate target rotation
-        if (weaponSystem.isAiming)
+        if (weaponSystem.isAiming == false)
         {
             t_x_adj = Quaternion.AngleAxis(-intensity * t_x_mouse, Vector3.up);
             t_y_adj = Quaternion.AngleAxis(intensity * t_y_mouse, Vector3.right);

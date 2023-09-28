@@ -52,7 +52,8 @@ public class WeaponSystem : MonoBehaviour
 
     private void Awake()
     {
-   
+        fpsCam = GameObject.Find("Camera").GetComponent<Camera>();
+        cameraRecoil = GameObject.Find("CamRecoil").GetComponent<CameraRecoil>();
         bulletsLeft = magazineSize;
         readyToShoot = true;
         originalPosition = transform.localPosition;

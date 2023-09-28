@@ -23,20 +23,20 @@ public class PlayerMovement : MonoBehaviour
 
     //idle headbob
     private Vector3 targetWeaponBobPosition;
-    private Vector3 weaponParentOrigin;
+    public Vector3 weaponParentOrigin;
     private float movementCounter;
     private float idleCounter;
 
 
     Vector3 velocity;
     bool isGrounded;
-    private bool isSpinting;
-    private bool isAiming;
+    public bool isAiming;
+
 
     private void Start()
     {
         baseFOV = fpsCam.fieldOfView;
-        weaponParentOrigin = weaponParent.localPosition;    
+        //weaponParentOrigin = weaponParent.localPosition;
     }
 
     // Update is called once per frame
@@ -53,12 +53,13 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
         bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        bool isSprinting = sprint && z >0 && !isAiming;
+        bool isSprinting = sprint && z > 0 && !isAiming;
         float t_adjustSpeed = speed;
-        if (isSprinting) {
+        if (isSprinting)
+        {
             t_adjustSpeed *= sprintModifier;
         }
-        if(isAiming)
+        if (isAiming)
         {
             t_adjustSpeed *= aimingModifier;
         }
@@ -96,7 +97,8 @@ public class PlayerMovement : MonoBehaviour
 
 
         //headbobbing
-        if (x == 0 && z == 0 && !isAiming)
+
+        /*if (x == 0 && z == 0 && !isAiming)
         {
             HeadBob(idleCounter, 0.025f, 0.025f);
             idleCounter += Time.deltaTime;
@@ -116,8 +118,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+
     void HeadBob (float p_z, float p_x_intensity, float p_y_intensity)
     {
         targetWeaponBobPosition = weaponParentOrigin + new Vector3(Mathf.Cos(p_z) * p_x_intensity, Mathf.Sin(p_z*2) * p_y_intensity, 0);
+    }
+    */
     }
 }
