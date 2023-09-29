@@ -33,7 +33,6 @@ public class CameraRecoil : MonoBehaviour
 
     public void Fire()
     {
-        Debug.Log("Called by weaponSystem");
         if (aiming)
         {
             currentRotation += new Vector3(-RecoilRotationAiming.x, Random.Range(-RecoilRotationAiming.y, RecoilRotationAiming.y), Random.Range(-RecoilRotationAiming.z, RecoilRotationAiming.z));

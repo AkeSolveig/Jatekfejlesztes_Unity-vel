@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -26,6 +28,7 @@ public class WeaponSystem : MonoBehaviour
 
     //muzzle flash
     public GameObject bulletHoleGraphic;
+    public GameObject bulletHoleGraphicBody;
     public GameObject muzzleLight;
     [SerializeField] VisualEffect muzzleFlash2;
 
@@ -43,12 +46,12 @@ public class WeaponSystem : MonoBehaviour
     public AudioClip fireClip;
     public AudioClip reloadClip;
 
-    //animator
-    //private Animator animator;
-
     //reload position
     public Vector3 reloadPosition;
     public float reloadPositionSpeed = 20f;
+
+    //enemy body part hitbox
+    private ZombieDamageHitbox damageEnemy; 
 
     private void Awake()
     {
@@ -115,17 +118,36 @@ public class WeaponSystem : MonoBehaviour
         Vector3 direction = fpsCam.transform.forward + new Vector3(x, y, z);
         
         //RayCast
-        if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit, range, whatIsEnemy))
+        if (Physics.Raycast(fpsCam.transform.position, direction, out rayHit))
         {
-            Debug.Log(rayHit.collider.name);
-
-            //if (rayHit.collider.CompareTag("Enemy")) rayHit.collider.GetComponent<ShootingAi>().TakeDamage(damage);
+            if(rayHit.collider.gameObject.GetComponent<ZombieDamageHitbox>() != null)
+            {
+                GameObject obj = Instantiate(bulletHoleGraphicBody, rayHit.point, Quaternion.LookRotation(rayHit.normal));
+                obj.transform.position += obj.transform.forward / 1000;
+                
+                damageEnemy = rayHit.collider.GetComponent<ZombieDamageHitbox>();
+                if(damageEnemy.bodyPart == ZombieDamageHitbox.collisonType.head)
+                {
+                    damageEnemy.BodyPartHit(damage * 2, true);
+                }
+                else if (damageEnemy.bodyPart == ZombieDamageHitbox.collisonType.body)
+                {
+                    damageEnemy.BodyPartHit(damage, false);
+                }
+                else if (damageEnemy.bodyPart == ZombieDamageHitbox.collisonType.limbs)
+                {
+                    damageEnemy.BodyPartHit(damage/2, false);
+                }
+            }
+            else
+            {
+                GameObject obj = Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.LookRotation(rayHit.normal));
+                obj.transform.position += obj.transform.forward / 1000;
+            }
         }
         //Debug.DrawRay(fpsCam.transform.position, direction, Color.green);
 
-        GameObject obj = Instantiate(bulletHoleGraphic, rayHit.point, Quaternion.LookRotation(rayHit.normal));
-        obj.transform.position += obj.transform.forward / 1000;
-        //Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+       
 
         //muzzleflash
         muzzleLight.SetActive(true);
@@ -157,7 +179,6 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
-    
 
     private void LightOff()
     {

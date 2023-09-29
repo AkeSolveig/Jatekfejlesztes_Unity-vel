@@ -1,20 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class ZombieController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private float timeOfLastAttack = 0;
+    private bool hasStopped = false;
+    private bool isAttacking = false;
 
     private NavMeshAgent agent = null;
     private Animator animator = null;
+    private ZombieStats stats = null;
     [SerializeField] Transform target;
 
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
+        stats = GetComponent<ZombieStats>();
     }
 
     private void Update()
@@ -25,15 +31,55 @@ public class ZombieController : MonoBehaviour
     private void RotateToTarget()
     {
         
-        /*Vector3 direction = target.position - transform.position;
+        Vector3 direction = target.position - transform.position;
         Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = rotation;*/
+        transform.rotation = rotation;
     }
 
     private void MoveToPlayer()
     {
         agent.SetDestination(target.position);
-        animator.SetFloat("Speed", 0.5f, 0.3f,Time.deltaTime);
-        //RotateToTarget();
+        RotateToTarget();
+        float distanceToTarget = Vector3.Distance(target.position, transform.position);
+        if(distanceToTarget <= agent.stoppingDistance)
+        {
+
+            if (!hasStopped)
+            {
+                animator.SetBool("HasStopped", true);
+                hasStopped = true;
+                timeOfLastAttack = Time.time;
+            }
+            CharacterStats targetStats = target.parent.gameObject.GetComponent<CharacterStats>();
+            if(!isAttacking)
+                StartCoroutine(AttackTarget(targetStats));
+
+        }
+        else
+        {
+            if (hasStopped)
+            {
+                hasStopped = false;
+                animator.SetBool("HasStopped", false);
+            }
+        }
+    }
+
+    private IEnumerator AttackTarget(CharacterStats statsToDamage)
+    {
+        isAttacking = true;
+        animator.SetTrigger("Attack");
+
+      
+        var animController = GetComponent<Animator>().runtimeAnimatorController;
+        var clip = animController.animationClips.First(a => a.name == "Zombie Attack");
+        
+        yield return new WaitForSeconds(clip.length/2);
+        if(Vector3.Distance(target.position, transform.position) <= agent.stoppingDistance)
+        {
+            stats.DealDamage(statsToDamage);
+        }
+        yield return new WaitForSeconds(clip.length / 2);
+        isAttacking = false;
     }
 }
