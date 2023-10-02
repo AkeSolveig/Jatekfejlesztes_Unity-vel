@@ -6,26 +6,26 @@ using UnityEngine.AI;
 public class ZombieStats : CharacterStats
 {
     [SerializeField] private int damage;
-    public float attackSpeed;
+    public static int numberOfEnemies;
 
     [SerializeField] private bool canAttack;
     public GameObject head;
     private GameObject player;
+    private void Awake()
+    {
+        InitVariables();
+    }
     private void Start()
     {
+        numberOfEnemies++;
         player = GameObject.FindGameObjectWithTag("Player");
-        InitVariables();
         setRigidBodyState(true);
-        setColliderState(true);
     }
     public override void InitVariables()
     {
-        maxHealth = 25;
         SetHealthTo(maxHealth);
         isDead = false;
-
         damage = 10;
-        attackSpeed = 1.9f;
         canAttack = true;
     }
     public void DealDamage(CharacterStats statsToDamage)
@@ -48,6 +48,7 @@ public class ZombieStats : CharacterStats
         gameObject.GetComponent<NavMeshAgent>().enabled = false;
         gameObject.GetComponent<ZombieController>().enabled = false;
         setRigidBodyState(false);
+        setColliderState(true);
         StartCoroutine(FadeIntoGround());
         
     }
@@ -64,8 +65,12 @@ public class ZombieStats : CharacterStats
         }
         Destroy(gameObject);
     }
+    private void OnDestroy()
+    {
+        numberOfEnemies--;
+        Debug.Log(ZombieStats.numberOfEnemies);
+    }
 
-  
 
 
     void setRigidBodyState(bool state)

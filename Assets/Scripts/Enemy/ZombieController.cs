@@ -14,13 +14,15 @@ public class ZombieController : MonoBehaviour
     private NavMeshAgent agent = null;
     private Animator animator = null;
     private ZombieStats stats = null;
-    [SerializeField] Transform target;
+    private Transform target;
 
     private void Start()
     {
+        target = GameObject.FindGameObjectWithTag("AITarget").transform;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         stats = GetComponent<ZombieStats>();
+        //animator.SetFloat("speedMultiplier", 0.5f);
     }
 
     private void Update()
@@ -39,7 +41,7 @@ public class ZombieController : MonoBehaviour
     private void MoveToPlayer()
     {
         agent.SetDestination(target.position);
-        RotateToTarget();
+        //RotateToTarget();
         float distanceToTarget = Vector3.Distance(target.position, transform.position);
         if(distanceToTarget <= agent.stoppingDistance)
         {
