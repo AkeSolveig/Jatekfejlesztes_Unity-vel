@@ -66,13 +66,14 @@ public class ZombieSpawner : MonoBehaviour
 
     }
 
-    public void SpawnZombie(GameObject zombie,int zombiesHealth)
+    public void SpawnZombie(GameObject zombie,int zombiesHealth, bool isRunning)
     {
         int randomInt = Random.Range(0, activeSpawners.Count);
         Transform randomSpawner = activeSpawners[randomInt];
         GameObject newZombie = Instantiate(zombie, randomSpawner.position, randomSpawner.rotation);
         CharacterStats newZombieStats = newZombie.GetComponent<CharacterStats>();
         newZombieStats.SetMaxHealthTo(zombiesHealth);
+        newZombieStats.isRunner = isRunning;
     }
 
 

@@ -45,10 +45,6 @@ public class CameraRecoil : MonoBehaviour
 
     private void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Fire();
-        }*/
         if (Input.GetKey(KeyCode.Mouse1))
         {
             aiming = true;

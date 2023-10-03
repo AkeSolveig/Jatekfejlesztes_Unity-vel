@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Burst.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -12,10 +13,11 @@ public class WeaponSystem : MonoBehaviour
     public float timeBetweenShooting, range, reloadTime, timeBetweenShots;
     public float defaultSpread, adsSpread;
     private float spread;
-    public int magazineSize, bulletsPerTap;
+
+    public int magazineSize, bulletsPerTap, maxAmmo, reserverdBulletsLeft, bulletsLeft, bulletsShot;
+
     public bool allowButtonHold;
-    int bulletsLeft, bulletsShot;
-    public bool isAiming;
+    public bool isUpgraded = false;
 
     //bools
     bool shooting, readyToShoot, reloading;
@@ -24,7 +26,7 @@ public class WeaponSystem : MonoBehaviour
     public Camera fpsCam;
     public Transform attackPoint;
     public RaycastHit rayHit;
-    public LayerMask whatIsEnemy;
+    private TextMeshProUGUI ammoCountText;
 
     //muzzle flash
     public GameObject bulletHoleGraphic;
@@ -40,6 +42,7 @@ public class WeaponSystem : MonoBehaviour
     public Vector3 originalPosition;
     public Vector3 adsPosition;
     public float adsSpeed = 8f;
+    public bool isAiming;
 
     //weapon sound
     public AudioSource source;
@@ -55,8 +58,10 @@ public class WeaponSystem : MonoBehaviour
 
     private void Awake()
     {
+        ammoCountText = GameObject.FindGameObjectWithTag("AmmoCountUI").GetComponent<TextMeshProUGUI>();
         fpsCam = GameObject.Find("Camera").GetComponent<Camera>();
         cameraRecoil = GameObject.Find("CamRecoil").GetComponent<CameraRecoil>();
+        reserverdBulletsLeft = maxAmmo;
         bulletsLeft = magazineSize;
         readyToShoot = true;
         originalPosition = transform.localPosition;
@@ -67,7 +72,7 @@ public class WeaponSystem : MonoBehaviour
         if (allowButtonHold) shooting = Input.GetKey(KeyCode.Mouse0);
         else shooting = Input.GetKeyDown(KeyCode.Mouse0);
 
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && reserverdBulletsLeft != 0) Reload();
 
         //shoot
         if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -95,6 +100,7 @@ public class WeaponSystem : MonoBehaviour
   
     private void Update()
     {
+        ammoCountText.text = bulletsLeft + " / " + reserverdBulletsLeft;
         MyInput();
         ADS();
         if (reloading) 
@@ -128,7 +134,7 @@ public class WeaponSystem : MonoBehaviour
                 damageEnemy = rayHit.collider.GetComponent<ZombieDamageHitbox>();
                 if(damageEnemy.bodyPart == ZombieDamageHitbox.collisonType.head)
                 {
-                    damageEnemy.BodyPartHit(damage * 2, true);
+                    damageEnemy.BodyPartHit(damage * 3, true);
                 }
                 else if (damageEnemy.bodyPart == ZombieDamageHitbox.collisonType.body)
                 {
@@ -177,6 +183,7 @@ public class WeaponSystem : MonoBehaviour
         {
             Invoke("Shoot", timeBetweenShots);
         }
+        
     }
 
 
@@ -204,8 +211,31 @@ public class WeaponSystem : MonoBehaviour
     private void ReloadFinished()
     {
         //GetComponent<Animator>().SetBool("isReloading", false);
+        int shotsFired = magazineSize - bulletsLeft;
+        int totalBullets = reserverdBulletsLeft + bulletsLeft;
+
+        if(totalBullets < magazineSize)
+        {
+            bulletsLeft = totalBullets;
+            reserverdBulletsLeft = 0;
+            totalBullets = 0;
+        }
+        else
+        {
+            bulletsLeft = magazineSize;
+            reserverdBulletsLeft -= shotsFired;
+            totalBullets = 0;
+        }
+        /*if(reserverdBulletsLeft >= magazineSize)
+        {
+            reserverdBulletsLeft -= magazineSize-bulletsLeft;
+            bulletsLeft = magazineSize;
+        }
+        else if(reserverdBulletsLeft < magazineSize)
+        {
+
+        }*/
         
-        bulletsLeft = magazineSize;
         reloading = false;
     }
 }

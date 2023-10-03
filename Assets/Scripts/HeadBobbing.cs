@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HeadBobbing : MonoBehaviour
 {
-    public PlayerMovement playerMovement;
+    private PlayerMovement playerMovement;
 
     private Vector3 targetWeaponBobPosition;
     private Vector3 weaponOriginalPosition;
@@ -12,7 +12,7 @@ public class HeadBobbing : MonoBehaviour
     private float idleCounter;
     void Start()
     {
-        playerMovement = GameObject.Find("First Person Player").GetComponent<PlayerMovement>();
+        playerMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
         weaponOriginalPosition = transform.localPosition;
     }
 

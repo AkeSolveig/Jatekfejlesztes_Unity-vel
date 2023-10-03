@@ -11,6 +11,7 @@ public class ZombieStats : CharacterStats
     [SerializeField] private bool canAttack;
     public GameObject head;
     private GameObject player;
+    private Points pointsScript;
     private void Awake()
     {
         InitVariables();
@@ -18,8 +19,10 @@ public class ZombieStats : CharacterStats
     private void Start()
     {
         numberOfEnemies++;
+        pointsScript = GameObject.FindGameObjectWithTag("PointsController").GetComponent<Points>();
         player = GameObject.FindGameObjectWithTag("Player");
         setRigidBodyState(true);
+        setColliderState(false);
     }
     public override void InitVariables()
     {
@@ -33,20 +36,33 @@ public class ZombieStats : CharacterStats
         statsToDamage.TakeDamage(damage, false);
     }
 
+    public override void TakeDamage(float damage, bool headshot)
+    {
+        
+        if (!isDead)
+        {
+            base.TakeDamage(damage, headshot);
+            pointsScript.AddScore(10);
+        }
+            
+    }
+
     public override void Die()
     {
         base.Die();
+        pointsScript.AddScore(90);
         Debug.Log(damageTaken);
         if (isHeadhshot && damageTaken >= 10)
         {
             head.transform.localScale = new Vector3(0f, 0f, 0f);
         }
-        //Destroy(gameObject);
+        
         gameObject.GetComponent<Animator>().enabled = false;
         gameObject.GetComponent<Collider>().enabled = false;
         gameObject.GetComponent<Rigidbody>().isKinematic = false;
         gameObject.GetComponent<NavMeshAgent>().enabled = false;
         gameObject.GetComponent<ZombieController>().enabled = false;
+        setIgnoreRaycastState();
         setRigidBodyState(false);
         setColliderState(true);
         StartCoroutine(FadeIntoGround());
@@ -72,7 +88,14 @@ public class ZombieStats : CharacterStats
     }
 
 
-
+    void setIgnoreRaycastState()
+    {
+        Transform[] children = GetComponentsInChildren<Transform>();
+        foreach(Transform child in children)
+        {
+            child.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+    }
     void setRigidBodyState(bool state)
     {
         Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
@@ -87,11 +110,17 @@ public class ZombieStats : CharacterStats
     void setColliderState(bool state)
     {
         Collider[] colliders = GetComponentsInChildren<Collider>();
-
         foreach (Collider collider in colliders)
         {
-            collider.enabled = state;
-            Physics.IgnoreCollision(collider, player.GetComponent<Collider>());
+            if (state)
+            {
+                Physics.IgnoreCollision(collider, player.GetComponent<Collider>());
+            }
+                
+            Physics.IgnoreCollision(collider,
+                            GameObject.FindGameObjectWithTag("SpawnerDoor").GetComponent<Collider>());
+
+            
         }
         //GetComponent<Collider>().enabled = !state;
     }

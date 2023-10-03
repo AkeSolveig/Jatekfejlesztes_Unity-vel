@@ -9,6 +9,11 @@ TagManager:
   - Enemy
   - AITarget
   - MainHall
+  - SpawnerDoor
+  - PointsController
+  - AmmoCountUI
+  - AmmoBox
+  - WeaponUpgrade
   layers:
   - Default
   - TransparentFX

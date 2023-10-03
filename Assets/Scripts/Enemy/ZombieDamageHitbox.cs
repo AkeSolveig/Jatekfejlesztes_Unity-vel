@@ -11,7 +11,6 @@ public class ZombieDamageHitbox : MonoBehaviour
 
     public void BodyPartHit(int damage,bool headshot)
     {
-        Debug.Log("Meglottek ezt a testreszt dmg: " + damage);
         stats.TakeDamage(damage, headshot);
     }
 }

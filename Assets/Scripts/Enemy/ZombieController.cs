@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class ZombieController : MonoBehaviour
 {
@@ -22,7 +23,11 @@ public class ZombieController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
         stats = GetComponent<ZombieStats>();
-        //animator.SetFloat("speedMultiplier", 0.5f);
+        if (stats.isRunner == true)
+        {
+            animator.SetBool("isRunning", true);
+            agent.speed = 3f;
+        }
     }
 
     private void Update()
@@ -34,14 +39,23 @@ public class ZombieController : MonoBehaviour
     {
         
         Vector3 direction = target.position - transform.position;
+        direction.y = 0;
         Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
         transform.rotation = rotation;
     }
 
     private void MoveToPlayer()
     {
-        agent.SetDestination(target.position);
-        //RotateToTarget();
+        if (!isAttacking)
+        {
+            agent.SetDestination(target.position);
+        } 
+        else
+        {
+            RotateToTarget();
+        }
+            
+        
         float distanceToTarget = Vector3.Distance(target.position, transform.position);
         if(distanceToTarget <= agent.stoppingDistance)
         {
@@ -70,18 +84,23 @@ public class ZombieController : MonoBehaviour
     private IEnumerator AttackTarget(CharacterStats statsToDamage)
     {
         isAttacking = true;
+        //float speedTemp = animator.speed;
+        //animator.speed = 0.8f;
+
+        animator.SetInteger("AttackIndex", Random.Range(0, 3));
         animator.SetTrigger("Attack");
 
-      
         var animController = GetComponent<Animator>().runtimeAnimatorController;
         var clip = animController.animationClips.First(a => a.name == "Zombie Attack");
         
         yield return new WaitForSeconds(clip.length/2);
-        if(Vector3.Distance(target.position, transform.position) <= agent.stoppingDistance)
+        if(Vector3.Distance(target.position, transform.position) <= agent.stoppingDistance + 0.5f)
         {
             stats.DealDamage(statsToDamage);
         }
         yield return new WaitForSeconds(clip.length / 2);
+
+        //animator.speed = speedTemp;
         isAttacking = false;
     }
 }

@@ -9,6 +9,7 @@ public class CharacterStats : MonoBehaviour
  
 
     [SerializeField] protected bool isDead;
+    public bool isRunner = false;
     protected bool isHeadhshot;
     private void Start()
     {

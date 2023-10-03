@@ -27,6 +27,12 @@ public class PlayerMovement : MonoBehaviour
     private float movementCounter;
     private float idleCounter;
 
+    //stamina
+    public float stamina;
+    float maxStamina;
+    public float dValue;
+    public float iValue;
+    private bool hasEnoughStamina = true;
 
     Vector3 velocity;
     bool isGrounded;
@@ -36,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         baseFOV = fpsCam.fieldOfView;
-        //weaponParentOrigin = weaponParent.localPosition;
+        maxStamina = stamina;
     }
 
     // Update is called once per frame
@@ -53,8 +59,15 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxisRaw("Vertical");
 
         bool sprint = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        bool isSprinting = sprint && z > 0 && !isAiming;
+        bool isSprinting = sprint && z > 0 && !isAiming && stamina != 0 && hasEnoughStamina;
         float t_adjustSpeed = speed;
+        
+        if(stamina < 1)
+        {
+            hasEnoughStamina = false;
+            StartCoroutine(SufficentStaminaToRun());
+        }
+
         if (isSprinting)
         {
             t_adjustSpeed *= sprintModifier;
@@ -83,8 +96,17 @@ public class PlayerMovement : MonoBehaviour
         if (isSprinting)
         {
             fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, baseFOV * sprintFOVModifier, Time.deltaTime * 8f);
+            DecreaseEnergy();
         }
-        else { fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, baseFOV, Time.deltaTime * 8f); }
+        else if(stamina != maxStamina)
+        {
+            fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, baseFOV, Time.deltaTime * 8f);
+            IncreaseEnergy();
+        }
+        else
+        {
+            fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, baseFOV, Time.deltaTime * 8f);
+        }
 
         if (Input.GetKey(KeyCode.Mouse1))
         {
@@ -94,5 +116,23 @@ public class PlayerMovement : MonoBehaviour
         {
             isAiming = false;
         }
+    }
+    private IEnumerator SufficentStaminaToRun()
+    {
+        yield return new WaitForSeconds(3);
+        hasEnoughStamina = true;
+    }
+    private void DecreaseEnergy()
+    {
+        if(stamina!=0)
+        {
+            stamina -= dValue * Time.deltaTime;
+        }
+    }
+    private void IncreaseEnergy()
+    {
+        
+        stamina += iValue * Time.deltaTime;
+        
     }
 }
