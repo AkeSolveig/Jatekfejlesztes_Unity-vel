@@ -2791,6 +2791,7 @@ MonoBehaviour:
   bulletsLeft: 0
   bulletsShot: 0
   allowButtonHold: 1
+  isUpgraded: 0
   fpsCam: {fileID: 0}
   attackPoint: {fileID: 1085974838171903652}
   bulletHoleGraphic: {fileID: 1000010844420130, guid: de75555ec54d21e42ab9a13e0e6bf774, type: 3}
@@ -2800,7 +2801,7 @@ MonoBehaviour:
   cameraRecoil: {fileID: 0}
   recoilSystem: {fileID: 7212073614913873795}
   originalPosition: {x: 0, y: 0, z: 0}
-  adsPosition: {x: -0.1175, y: 0.015, z: 0.05}
+  adsPosition: {x: -0.1172, y: 0.018, z: 0.05}
   adsSpeed: 8
   isAiming: 0
   source: {fileID: 8419602721276892599}

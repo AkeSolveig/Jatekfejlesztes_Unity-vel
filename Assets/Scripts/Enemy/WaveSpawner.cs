@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
-using UnityEditor.SceneTemplate;
+using TMPro;
 using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
@@ -11,13 +11,17 @@ public class WaveSpawner : MonoBehaviour
     private int zombiesHealth = 100;
     private int chance = 0;
     private bool isSpawningWave;
-    [SerializeField] private GameObject zombie1;
 
-    //[SerializeField] private GameObject zombie2;
+    //zombie types & spawning
     public GameObject[] enemies;
     private float[] percentages = {100f,0f};
     [SerializeField] private ZombieSpawner zombiespawner;
 
+    //UI
+    public TextMeshProUGUI waveNumberText;
+
+    public AudioSource playerAudioSource;
+    public AudioClip waveStartSound;
 
     private void Start()
     {
@@ -34,6 +38,8 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator SpawningWave()
     {
+        UpdateWaveNumber();
+        playerAudioSource.PlayOneShot(waveStartSound);
         isSpawningWave = true;
         yield return new WaitForSeconds(5f);
         for (int i = 0; i < enemiesNumber; i++)
@@ -48,8 +54,8 @@ public class WaveSpawner : MonoBehaviour
 
     private void BuffZombies()
     {
-        enemiesNumber += 2;
-        zombiesHealth += 50;
+        enemiesNumber += 3;
+        zombiesHealth += 100;
         isSpawningWave = false;
     }
 
@@ -70,30 +76,12 @@ public class WaveSpawner : MonoBehaviour
         }
        
     }
-
-    private int GetRandomSpawn()
+    private void UpdateWaveNumber()
     {
-        float random = Random.Range(0f, 1f);
-        float numForAdding = 0;
-        float total = 0;
-        for(int i = 0; i < percentages.Length; i++)
-        {
-            total += percentages[i];
-        }
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (percentages[i]/total + numForAdding >= random)
-            {
-                return i;
-            }
-            else
-            {
-                numForAdding = +percentages[i] / total;
-            }
-        }
-        return 0;
+        waveNumberText.text = "" + currentWave;
     }
+
+   
  
 
 }

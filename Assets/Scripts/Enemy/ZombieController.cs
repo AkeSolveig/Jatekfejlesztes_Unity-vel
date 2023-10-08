@@ -17,8 +17,15 @@ public class ZombieController : MonoBehaviour
     private ZombieStats stats = null;
     private Transform target;
 
+    private AudioSource audioSource;
+    private AudioClip lastIdleAudioClip;
+    private AudioClip lastAttackAudioClip;
+    public AudioClip[] attackClips;
+    public AudioClip[] idleClips;
+    private bool hasAudioEnded = true;
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         target = GameObject.FindGameObjectWithTag("AITarget").transform;
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
@@ -33,6 +40,23 @@ public class ZombieController : MonoBehaviour
     private void Update()
     {
         MoveToPlayer();
+        if (!isAttacking && hasAudioEnded)
+        {
+            StartCoroutine(PlayIdleSound());
+        }
+        
+    }
+    private IEnumerator PlayIdleSound()
+    {
+        hasAudioEnded = false;
+        while (audioSource.clip == lastIdleAudioClip)
+        {
+            audioSource.clip = idleClips[Random.Range(0, idleClips.Length)];
+        }
+        lastIdleAudioClip = audioSource.clip;
+        audioSource.Play();
+        yield return new WaitForSeconds(Random.Range(5f, 10f));
+        hasAudioEnded = true;
     }
 
     private void RotateToTarget()
@@ -84,8 +108,14 @@ public class ZombieController : MonoBehaviour
     private IEnumerator AttackTarget(CharacterStats statsToDamage)
     {
         isAttacking = true;
-        //float speedTemp = animator.speed;
-        //animator.speed = 0.8f;
+
+        while (audioSource.clip == lastAttackAudioClip)
+        {
+            audioSource.clip = attackClips[Random.Range(0, attackClips.Length)];
+        }
+        lastAttackAudioClip = audioSource.clip;
+        audioSource.Play();
+
 
         animator.SetInteger("AttackIndex", Random.Range(0, 3));
         animator.SetTrigger("Attack");
@@ -100,7 +130,6 @@ public class ZombieController : MonoBehaviour
         }
         yield return new WaitForSeconds(clip.length / 2);
 
-        //animator.speed = speedTemp;
         isAttacking = false;
     }
 }

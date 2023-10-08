@@ -34,15 +34,16 @@ public class HeadBobbing : MonoBehaviour
         else if (isSprinting == false && playerMovement.isAiming == false)
         {
             HeadBob(movementCounter, 0.035f, 0.035f);
-            movementCounter += Time.deltaTime * 3f;
-            transform.localPosition = Vector3.Lerp(transform.localPosition, targetWeaponBobPosition, Time.deltaTime * 6f);
+            movementCounter += Time.deltaTime * 4.5f;
+            transform.localPosition = Vector3.Lerp(transform.localPosition, targetWeaponBobPosition, Time.deltaTime * 8f);
         }
         else if (isSprinting == true && playerMovement.isAiming == false)
         {
             HeadBob(movementCounter, 0.03f, 0.045f);
-            movementCounter += Time.deltaTime * 4.5f;
+            movementCounter += Time.deltaTime * 5.5f;
             transform.localPosition = Vector3.Lerp(transform.localPosition, targetWeaponBobPosition, Time.deltaTime * 10f);
         }
+        
     }
 
     void HeadBob(float p_z, float p_x_intensity, float p_y_intensity)

@@ -14,6 +14,7 @@ public class PlayerStats : CharacterStats
     [SerializeField] private float healCooldown = 3.0f;
     [SerializeField] private float maxHealCooldown = 3.0f;
     private bool startCooldown = false;
+    public bool isHealthUpgraded = false;
     private void Start()
     {
         InitVariables();

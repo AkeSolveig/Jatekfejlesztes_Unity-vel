@@ -226,16 +226,6 @@ public class WeaponSystem : MonoBehaviour
             reserverdBulletsLeft -= shotsFired;
             totalBullets = 0;
         }
-        /*if(reserverdBulletsLeft >= magazineSize)
-        {
-            reserverdBulletsLeft -= magazineSize-bulletsLeft;
-            bulletsLeft = magazineSize;
-        }
-        else if(reserverdBulletsLeft < magazineSize)
-        {
-
-        }*/
-        
         reloading = false;
     }
 }

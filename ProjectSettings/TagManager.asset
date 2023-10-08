@@ -14,6 +14,14 @@ TagManager:
   - AmmoCountUI
   - AmmoBox
   - WeaponUpgrade
+  - HealthUpgrade
+  - DoubleShotUpgrade
+  - StaminaUpgrade
+  - Door
+  - DoubleDoor
+  - MainhallUpperHallway
+  - Mainhall
+  - ZombieSpawner
   layers:
   - Default
   - TransparentFX

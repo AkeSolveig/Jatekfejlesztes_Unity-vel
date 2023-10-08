@@ -52,10 +52,10 @@ public class ZombieSpawner : MonoBehaviour
         }
         foreach (Transform spawner in spawners)
         {
-            if (Vector3.Distance(AITarget.position, spawner.position) < 30
+            if (Vector3.Distance(AITarget.position, spawner.position) < 35
                 && Vector3.Distance(AITarget.position, spawner.position) > 7
                 && (Mathf.Abs(AITarget.position.y - spawner.position.y) < 5
-                || Vector3.Distance(AITarget.position, mainHall.position) < 25))
+                || Vector3.Distance(AITarget.position, mainHall.position) < 30))
             {
 
                 activeSpawners.Add(spawner);

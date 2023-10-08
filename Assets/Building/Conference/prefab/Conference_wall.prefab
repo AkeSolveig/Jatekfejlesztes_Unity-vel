@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 311615106459317206}
   - component: {fileID: 3992092687411103807}
   - component: {fileID: 3734373018861685769}
+  - component: {fileID: 3643271796139582785}
   m_Layer: 0
   m_Name: Conference_wall
   m_TagString: Untagged
@@ -86,3 +87,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3643271796139582785
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4220055092458838665}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0043292535, y: 0.029999994, z: 0.042759173}
+  m_Center: {x: 0.0011646268, y: 0, z: -0.0036204087}
