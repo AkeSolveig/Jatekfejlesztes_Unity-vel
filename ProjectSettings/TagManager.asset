@@ -22,6 +22,15 @@ TagManager:
   - MainhallUpperHallway
   - Mainhall
   - ZombieSpawner
+  - UpperHallway
+  - Conference
+  - Bar
+  - Staircase
+  - Hallway2
+  - SmallHallway
+  - DoorsToRooms
+  - Hallway1
+  - Ceremony
   layers:
   - Default
   - TransparentFX
@@ -30,17 +39,17 @@ TagManager:
   - Water
   - UI
   - Enemy
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Mainhall
+  - MainhallUpperHallway
+  - UpperHallway
+  - Staircase
+  - Conference
+  - Bar
+  - Library
+  - Hallway1
+  - Hallway2
+  - SmallHallway
+  - Ceremony
   - 
   - 
   - 

@@ -39,7 +39,8 @@ public class WeaponSwitching : MonoBehaviour
     public GameObject DoubleShotUI;
     public GameObject StaminaUI;
 
-    // Start is called before the first frame update
+    //Player spawn activation
+    public PlayerLocationForSpawners spawnerScript;
     void Start()
     {
         
@@ -257,9 +258,12 @@ public class WeaponSwitching : MonoBehaviour
                 {
                     pointsScript.SubstractScore(price);
                     Debug.Log("door");
-                    currentTrigger.gameObject.GetComponent<NavMeshObstacle>().enabled = false;
-                    Door doorScript = currentTrigger.gameObject.GetComponent<Door>();
-                    doorScript.Open(transform.position);              
+                    //currentTrigger.gameObject.GetComponent<NavMeshObstacle>().enabled = false;
+                    Door doorScript = currentTrigger.gameObject.GetComponentInParent<Door>();
+                    doorScript.Open(transform.position);
+                    currentTrigger.gameObject.GetComponent<Collider>().enabled = false;
+                    currentTrigger.gameObject.GetComponent<Value>().price = 0;
+                    spawnerScript.CheckSpawners();
                 }
             }
             if (currentTrigger.gameObject.tag == "DoubleDoor")
@@ -273,6 +277,9 @@ public class WeaponSwitching : MonoBehaviour
                     Door doorScript2 = currentTrigger.transform.GetChild(1).GetComponent<Door>();
                     doorScript1.Open(transform.position);
                     doorScript2.Open(transform.position);
+                    currentTrigger.gameObject.GetComponent<Collider>().enabled = false;
+                    currentTrigger.gameObject.GetComponent<Value>().price = 0;
+                    spawnerScript.CheckSpawners();
                 }
             }
         }

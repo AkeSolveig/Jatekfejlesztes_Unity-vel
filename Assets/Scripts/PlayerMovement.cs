@@ -63,7 +63,16 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //Debug.Log(Time.frameCount / Time.time);
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        //isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        RaycastHit hit;
+        int currentRoomLayer = -1;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity))
+        {
+            currentRoomLayer = hit.collider.gameObject.layer;
+        }
+
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, 1 << currentRoomLayer);
+
 
         if (isGrounded && velocity.y < 0)
         {
@@ -143,7 +152,6 @@ public class PlayerMovement : MonoBehaviour
         }
         lastAudioClip = footstepSource.clip;
         footstepSource.Play();
-        Debug.Log(isSprinting);
         if(!isSprinting && !isAiming)
             yield return new WaitForSeconds(timeBetweenSteps);
         else if (isSprinting)

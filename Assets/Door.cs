@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Door : MonoBehaviour
 {
@@ -57,7 +59,9 @@ public class Door : MonoBehaviour
             {
                 AnimationCoroutine = StartCoroutine(DoSlidingOpen());
             }
-            GameObject zombieSpawner = GameObject.FindGameObjectWithTag("ZombieSpawner");
+            gameObject.GetComponent<NavMeshModifier>().enabled = false;
+            gameObject.GetComponent<NavMeshObstacle>().enabled = false;
+            /*GameObject zombieSpawner = GameObject.FindGameObjectWithTag("ZombieSpawner");
             Transform[] spawners = zombieSpawner.GetComponentsInChildren<Transform>(true);
             
             foreach(Transform spawner in spawners)
@@ -66,7 +70,7 @@ public class Door : MonoBehaviour
                 {
                     spawner.gameObject.SetActive(true); 
                 }
-            }
+            }*/
         }
     }
 

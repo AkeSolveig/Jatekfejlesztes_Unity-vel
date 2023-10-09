@@ -11,7 +11,7 @@ public class Points : MonoBehaviour
 
     private void Start()
     {
-        score = 4000;
+        score = 8000;
         UpdateScore();
     }
     public void AddScore(int scoreToAdd)
