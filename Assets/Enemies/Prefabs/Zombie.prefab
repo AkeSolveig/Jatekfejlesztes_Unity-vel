@@ -1366,7 +1366,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3533830283884730522}
   - component: {fileID: 7140941867353244043}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WorldWar_zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}

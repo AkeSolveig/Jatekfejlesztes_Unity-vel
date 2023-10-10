@@ -49,12 +49,12 @@ public class WaveSpawner : MonoBehaviour
         }
         currentWave++;
         BuffZombies();
-        isSpawningWave = false;
+        //isSpawningWave = false;
     }
 
     private void BuffZombies()
     {
-        enemiesNumber += 3;
+        enemiesNumber += 4;
         zombiesHealth += 100;
         isSpawningWave = false;
     }
@@ -62,11 +62,27 @@ public class WaveSpawner : MonoBehaviour
     private bool IsRunner()
     {
         int randValue = Random.Range(0, 100);
-        if(currentWave == 2)
+        if(currentWave == 3)
         {
-            chance = 30;
+            chance = 20;
         }
-        if(randValue <= chance)
+        if(currentWave == 6)
+        {
+            chance = 40;
+        }
+        if (currentWave == 9)
+        {
+            chance = 60;
+        }
+        if (currentWave == 12)
+        {
+            chance = 80;
+        }
+        if (currentWave == 15)
+        {
+            chance = 100;
+        }
+        if (randValue <= chance)
         {
             return true;
         }

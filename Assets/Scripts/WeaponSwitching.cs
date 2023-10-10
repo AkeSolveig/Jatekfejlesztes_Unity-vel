@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Burst.Intrinsics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,9 +39,12 @@ public class WeaponSwitching : MonoBehaviour
     public GameObject healthUI;
     public GameObject DoubleShotUI;
     public GameObject StaminaUI;
+    public TextMeshProUGUI interactionText;
 
     //Player spawn activation
     public PlayerLocationForSpawners spawnerScript;
+
+    
     void Start()
     {
         
@@ -109,9 +113,11 @@ public class WeaponSwitching : MonoBehaviour
         {
             int price = currentTrigger.gameObject.GetComponent<Value>().price;
             bool canAfford = pointsScript.score >= price;
+            interactionText.gameObject.SetActive(true);
 
             if (currentTrigger.gameObject.tag == "BuyableWeapon")
             {
+                interactionText.text = "Press 'F' to buy weapon for '" + price + "' points";
                 if (hasPrimary && hasSecondary)
                 {
                     //Debug.Log(other.gameObject.transform.GetChild(0).gameObject.name + "    ||    " + primaryChildName +"   ||    "+secondaryChildName);
@@ -174,7 +180,7 @@ public class WeaponSwitching : MonoBehaviour
             }
             if (currentTrigger.gameObject.tag == "AmmoBox")
             {
-                Debug.Log(currentTrigger.gameObject.name);
+                interactionText.text = "Press 'F' to refill ammo for '" + price + "' points";
                 if (playerInteractionKey && canAfford)
                 {
                     WeaponSystem[] weaponScripts = GetComponentsInChildren<WeaponSystem>(true);
@@ -187,7 +193,7 @@ public class WeaponSwitching : MonoBehaviour
             }
             if (currentTrigger.gameObject.tag == "WeaponUpgrade")
             {
-                //Debug.Log(currentTrigger.gameObject.name);
+                interactionText.text = "Press 'F' to upgrade weapon for '" + price + "' points";
                 if (selectedWeapon == 0 && playerInteractionKey && canAfford)
                 {
                     Debug.Log("inside if pistol");
@@ -214,6 +220,7 @@ public class WeaponSwitching : MonoBehaviour
             }
             if (currentTrigger.gameObject.tag == "HealthUpgrade")
             {
+                interactionText.text = "Press 'F' to buy health upgrade for '" + price + "' points";
                 if (playerInteractionKey && canAfford && playerStats.isHealthUpgraded == false)
                 {
                     playerStats.SetMaxHealthTo(200);
@@ -224,6 +231,7 @@ public class WeaponSwitching : MonoBehaviour
             }
             if (currentTrigger.gameObject.tag == "DoubleShotUpgrade" )
             {
+                interactionText.text = "Press 'F' to buy double shot upgarde for '" + price + "' points";
                 if (playerInteractionKey && canAfford && doublesShotUpgraded == false)
                 {
                     WeaponSystem[] weaponScripts = GetComponentsInChildren<WeaponSystem>(true);
@@ -239,7 +247,8 @@ public class WeaponSwitching : MonoBehaviour
             }
             if(currentTrigger.gameObject.tag == "StaminaUpgrade" && staminUpgraded == false)
             {
-                if(playerInteractionKey && canAfford)
+                interactionText.text = "Press 'F' to buy stamina upgrade for '" + price + "' points";
+                if (playerInteractionKey && canAfford)
                 {
                     pointsScript.SubstractScore(price);
                     playerMovement.maxStamina *= 1.5f;
@@ -253,22 +262,23 @@ public class WeaponSwitching : MonoBehaviour
             }
             if(currentTrigger.gameObject.tag == "Door")
             {
-                
-                if(playerInteractionKey && canAfford)
+                interactionText.text = "Press 'F' to open the door for '" + price + "' points";
+                if (playerInteractionKey && canAfford)
                 {
                     pointsScript.SubstractScore(price);
                     Debug.Log("door");
                     //currentTrigger.gameObject.GetComponent<NavMeshObstacle>().enabled = false;
                     Door doorScript = currentTrigger.gameObject.GetComponentInParent<Door>();
                     doorScript.Open(transform.position);
+                    currentTrigger.gameObject.GetComponent<Collider>().isTrigger = false;
                     currentTrigger.gameObject.GetComponent<Collider>().enabled = false;
-                    currentTrigger.gameObject.GetComponent<Value>().price = 0;
                     spawnerScript.CheckSpawners();
+                    StartCoroutine(ExitDoorCollider());
                 }
             }
             if (currentTrigger.gameObject.tag == "DoubleDoor")
             {
-
+                interactionText.text = "Press 'F' to open the door for '" + price + "' points";
                 if (playerInteractionKey && canAfford)
                 {
                     pointsScript.SubstractScore(price);
@@ -277,16 +287,20 @@ public class WeaponSwitching : MonoBehaviour
                     Door doorScript2 = currentTrigger.transform.GetChild(1).GetComponent<Door>();
                     doorScript1.Open(transform.position);
                     doorScript2.Open(transform.position);
-                    currentTrigger.gameObject.GetComponent<Collider>().enabled = false;
-                    currentTrigger.gameObject.GetComponent<Value>().price = 0;
+                    currentTrigger.isTrigger = false;
+                    currentTrigger.enabled = false;
                     spawnerScript.CheckSpawners();
+                    StartCoroutine(ExitDoorCollider());
+                    
                 }
             }
         }
-        
-
     }
-
+    private IEnumerator ExitDoorCollider()
+    {
+        yield return new WaitForEndOfFrame();
+        OnTriggerExit(currentTrigger);
+    }
 
     void SelectWeapon()
     {
@@ -366,6 +380,7 @@ public class WeaponSwitching : MonoBehaviour
             currentTrigger = null;
         }
         weaponAlreadyInUse = false;
+        interactionText.gameObject.SetActive(false);
     }
 
 
