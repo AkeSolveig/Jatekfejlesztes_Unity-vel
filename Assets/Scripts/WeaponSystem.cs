@@ -75,7 +75,7 @@ public class WeaponSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && reserverdBulletsLeft != 0) Reload();
 
         //shoot
-        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0 && PauseMenu.gameIsPaused == false)
         {
             bulletsShot = bulletsPerTap;
             Shoot();

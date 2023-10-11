@@ -109,7 +109,7 @@ public class WeaponSwitching : MonoBehaviour
             }
         }
         //interactions
-        if(currentTrigger != null)
+        if(currentTrigger != null && PauseMenu.gameIsPaused == false)
         {
             int price = currentTrigger.gameObject.GetComponent<Value>().price;
             bool canAfford = pointsScript.score >= price;

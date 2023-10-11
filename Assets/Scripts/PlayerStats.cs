@@ -15,6 +15,9 @@ public class PlayerStats : CharacterStats
     [SerializeField] private float maxHealCooldown = 3.0f;
     private bool startCooldown = false;
     public bool isHealthUpgraded = false;
+
+    public Points pointsScript;
+    public DeathScreen gameOverScript;
     private void Start()
     {
         InitVariables();
@@ -49,6 +52,14 @@ public class PlayerStats : CharacterStats
             startCooldown = true;
         }
     }
+    public override void Die()
+    {
+        base.Die();
+        pointsScript.UpdateHighScore();
+        gameOverScript.GameHasEnded();
+
+    }
+
     private void Update()
     {
         if (startCooldown)
