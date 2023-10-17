@@ -1,10 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.ProBuilder.MeshOperations;
 
 public class ZombieController : MonoBehaviour
 {
@@ -84,7 +81,6 @@ public class ZombieController : MonoBehaviour
             {
                 animator.SetBool("HasStopped", true);
                 hasStopped = true;
-                //timeOfLastAttack = Time.time;
             }
             CharacterStats targetStats = target.parent.gameObject.GetComponent<CharacterStats>();
             if(!isAttacking)
