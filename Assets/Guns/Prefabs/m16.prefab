@@ -5346,13 +5346,14 @@ MonoBehaviour:
   adsSpread: 0.008
   magazineSize: 30
   bulletsPerTap: 0
+  maxAmmo: 180
+  reserverdBulletsLeft: 0
+  bulletsLeft: 0
+  bulletsShot: 0
   allowButtonHold: 1
-  isAiming: 0
+  isUpgraded: 0
   fpsCam: {fileID: 0}
   attackPoint: {fileID: 5770605537250804211}
-  whatIsEnemy:
-    serializedVersion: 2
-    m_Bits: 0
   bulletHoleGraphic: {fileID: 1000010844420130, guid: de75555ec54d21e42ab9a13e0e6bf774, type: 3}
   bulletHoleGraphicBody: {fileID: 141569237744047480, guid: 756c690bb94d4da47a3955b9ee3f8b47, type: 3}
   muzzleLight: {fileID: 2277937823793699492}
@@ -5362,8 +5363,9 @@ MonoBehaviour:
   originalPosition: {x: 0, y: 0, z: 0}
   adsPosition: {x: -0.173, y: -0.008, z: 0.06}
   adsSpeed: 8
+  isAiming: 0
   source: {fileID: 1165528557608136501}
-  fireClip: {fileID: 8300000, guid: 2e33e30a419e6984eb55c6fbb92340fb, type: 3}
+  fireClip: {fileID: 8300000, guid: 1065fd7001c4d944ab57f0d0df845f79, type: 3}
   reloadClip: {fileID: 8300000, guid: ba4a94fc9473e8249b12918e0c9856f9, type: 3}
   reloadPosition: {x: 0, y: -0.6, z: 0}
   reloadPositionSpeed: 5

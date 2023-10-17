@@ -31,6 +31,9 @@ TagManager:
   - DoorsToRooms
   - Hallway1
   - Ceremony
+  - VolumeSlider
+  - Library
+  - EscapeDoor
   layers:
   - Default
   - TransparentFX

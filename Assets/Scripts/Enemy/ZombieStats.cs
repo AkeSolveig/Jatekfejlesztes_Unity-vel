@@ -8,7 +8,6 @@ public class ZombieStats : CharacterStats
     [SerializeField] private int damage;
     public static int numberOfEnemies;
 
-    [SerializeField] private bool canAttack;
     public GameObject head;
     private GameObject player;
     private Points pointsScript;
@@ -29,7 +28,6 @@ public class ZombieStats : CharacterStats
         SetHealthTo(maxHealth);
         isDead = false;
         damage = 10;
-        canAttack = true;
     }
     public void DealDamage(CharacterStats statsToDamage)
     {
@@ -38,13 +36,11 @@ public class ZombieStats : CharacterStats
 
     public override void TakeDamage(float damage, bool headshot)
     {
-        
         if (!isDead)
         {
             base.TakeDamage(damage, headshot);
             pointsScript.AddScore(10);
-        }
-            
+        }       
     }
 
     public override void Die()
@@ -104,8 +100,6 @@ public class ZombieStats : CharacterStats
         {
             rigidbody.isKinematic = state;
         }
-
-        //GetComponent<Rigidbody>().isKinematic = !state;
     }
     void setColliderState(bool state)
     {
@@ -119,10 +113,7 @@ public class ZombieStats : CharacterStats
                 
             Physics.IgnoreCollision(collider,
                             GameObject.FindGameObjectWithTag("SpawnerDoor").GetComponent<Collider>());
-
-            
         }
-        //GetComponent<Collider>().enabled = !state;
     }
 
 }

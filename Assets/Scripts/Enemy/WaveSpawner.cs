@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class WaveSpawner : MonoBehaviour
 {
+    //default settings
     private int enemiesNumber = 5;
     private int currentWave = 1;
     private int zombiesHealth = 100;
@@ -14,19 +15,16 @@ public class WaveSpawner : MonoBehaviour
 
     //zombie types & spawning
     public GameObject[] enemies;
-    private float[] percentages = {100f,0f};
     [SerializeField] private ZombieSpawner zombiespawner;
 
     //UI
     public TextMeshProUGUI waveNumberText;
 
+    //AUDIO
     public AudioSource playerAudioSource;
     public AudioClip waveStartSound;
 
-    private void Start()
-    {
-        StartCoroutine(SpawningWave());
-    }
+
     private void Update()
     {
         if (!isSpawningWave && ZombieStats.numberOfEnemies == 0)
@@ -38,9 +36,9 @@ public class WaveSpawner : MonoBehaviour
 
     private IEnumerator SpawningWave()
     {
+        isSpawningWave = true;
         UpdateWaveNumber();
         playerAudioSource.PlayOneShot(waveStartSound);
-        isSpawningWave = true;
         yield return new WaitForSeconds(5f);
         for (int i = 0; i < enemiesNumber; i++)
         {
@@ -49,7 +47,6 @@ public class WaveSpawner : MonoBehaviour
         }
         currentWave++;
         BuffZombies();
-        //isSpawningWave = false;
     }
 
     private void BuffZombies()
@@ -57,16 +54,11 @@ public class WaveSpawner : MonoBehaviour
         enemiesNumber += 4;
         zombiesHealth += 100;
         isSpawningWave = false;
-    }
-
-    private bool IsRunner()
-    {
-        int randValue = Random.Range(0, 100);
-        if(currentWave == 3)
+        if (currentWave == 3)
         {
             chance = 20;
         }
-        if(currentWave == 6)
+        if (currentWave == 6)
         {
             chance = 40;
         }
@@ -82,6 +74,12 @@ public class WaveSpawner : MonoBehaviour
         {
             chance = 100;
         }
+    }
+
+    private bool IsRunner()
+    {
+        int randValue = Random.Range(0, 100);
+
         if (randValue <= chance)
         {
             return true;

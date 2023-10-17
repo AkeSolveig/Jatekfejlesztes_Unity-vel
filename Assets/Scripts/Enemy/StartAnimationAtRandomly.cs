@@ -11,6 +11,4 @@ public class StartAnimationAtRandomly : MonoBehaviour
         var state = animator.GetCurrentAnimatorStateInfo(0);
         animator.Play(state.fullPathHash, 0, Random.value);
     }
-
-    
 }

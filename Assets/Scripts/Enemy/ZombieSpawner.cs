@@ -19,20 +19,6 @@ public class ZombieSpawner : MonoBehaviour
             activeSpawners.Add(spawner);
         }
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            //SpawnZombie();
-            foreach (var item in activeSpawners)
-            {
-                Debug.Log(item.ToString());
-            }
-
-        }
-    }
-
     public void SpawnZombie(GameObject zombie,int zombiesHealth, bool isRunning)
     {
         GetSpawners();

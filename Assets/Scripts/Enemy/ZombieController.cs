@@ -8,7 +8,6 @@ using UnityEngine.ProBuilder.MeshOperations;
 
 public class ZombieController : MonoBehaviour
 {
-    private float timeOfLastAttack = 0;
     private bool hasStopped = false;
     private bool isAttacking = false;
 
@@ -61,7 +60,6 @@ public class ZombieController : MonoBehaviour
 
     private void RotateToTarget()
     {
-        
         Vector3 direction = target.position - transform.position;
         direction.y = 0;
         Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
@@ -79,16 +77,14 @@ public class ZombieController : MonoBehaviour
             RotateToTarget();
         }
             
-        
         float distanceToTarget = Vector3.Distance(target.position, transform.position);
         if(distanceToTarget <= agent.stoppingDistance)
         {
-
             if (!hasStopped)
             {
                 animator.SetBool("HasStopped", true);
                 hasStopped = true;
-                timeOfLastAttack = Time.time;
+                //timeOfLastAttack = Time.time;
             }
             CharacterStats targetStats = target.parent.gameObject.GetComponent<CharacterStats>();
             if(!isAttacking)
